@@ -39,6 +39,15 @@ const staggerContainer = {
   }
 };
 
+interface GlassCardProps {
+    src: string;
+    title: string;
+    description: string;
+    iconBg?: string;
+    delay?: number;
+  }
+  
+
 const programmingLanguages = [
   "JavaScript", "Python", "Java", "C++", "C#", "Ruby", 
   "Go", "Swift", "Kotlin", "Rust", "TypeScript", "PHP",
