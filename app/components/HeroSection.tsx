@@ -39,7 +39,7 @@ export default function HeroSection({ title, description, description2, descript
                         <BlueButton label={"learn more"} />
                     </div>
                 </div>
-                <div>
+                <div className="flex justify-center">
                     <Image className="lg:max-w-[360px] max-w-[260px]" src={img} alt="About" />
                 </div>
             </div>

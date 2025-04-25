@@ -258,7 +258,7 @@ function CoreTeamSection() {
       }
     };
 
-    const interval = setInterval(scrollNext, 2000);
+    const interval = setInterval(scrollNext, 3500);
     return () => clearInterval(interval);
   }, [api, autoScroll]);
 
