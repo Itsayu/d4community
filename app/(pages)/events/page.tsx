@@ -124,31 +124,34 @@ function EventSection() {
                     <Heading title={"Recent Events"} />
                 </motion.div>
                 
+                {/* Improved card container with proper centering and responsiveness */}
                 <motion.div 
                     ref={containerRef}
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 py-12 md:py-16 lg:py-24"
+                    className="w-full mx-auto px-4 md:px-0"
                 >
-                    {RecentEventInfo.map((props, k) => (
-                        <motion.div
-                            key={k}
-                            className="h-full"
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ 
-                                duration: 0.5, 
-                                delay: k * 0.15,
-                                ease: "easeOut" 
-                            }}
-                        >
-                            <RecentEventCard 
-                                date={props.date} 
-                                eventName={props.eventName} 
-                                image={props.image} 
-                                link={props.link}
-                            />
-                        </motion.div>
-                    ))}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 justify-items-center">
+                        {RecentEventInfo.map((props, k) => (
+                            <motion.div
+                                key={k}
+                                className="w-full max-w-sm h-full"
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ 
+                                    duration: 0.5, 
+                                    delay: k * 0.15,
+                                    ease: "easeOut" 
+                                }}
+                            >
+                                <RecentEventCard 
+                                    date={props.date} 
+                                    eventName={props.eventName} 
+                                    image={props.image} 
+                                    link={props.link}
+                                />
+                            </motion.div>
+                        ))}
+                    </div>
                 </motion.div>
 
                 {/* Upcoming Event in recent event section */}
@@ -232,11 +235,13 @@ function UpcomingEventSection() {
             >
                 <Heading title={"Upcoming Events"} />
             </motion.div>
-            <div className="py-8 md:py-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            {/* Improved upcoming events cards with consistent sizing */}
+            <div className="py-8 md:py-12 grid grid-cols-1 md:grid-cols-2 gap-8 px-4 md:px-0">
                 {upcomingEvents.map((event, index) => (
                     <motion.div
                         key={event.id}
-                        className="h-full"
+                        className="w-full h-full"
                         initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
