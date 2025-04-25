@@ -25,6 +25,7 @@ import mentoring3 from "../assets/icons/mentoring3.png";
 import { BigHeading, Heading } from "../components/Headings";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import { StaticImageData } from 'next/image';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -40,11 +41,19 @@ const staggerContainer = {
 };
 
 interface GlassCardProps {
-    src: string;
+    src: string | StaticImageData;
     title: string;
-    description: string;
+    description?: string;
     iconBg?: string;
     delay?: number;
+  }
+
+  interface MarqueeLineProps {
+    direction?: "left" | "right";
+    speed?: number;
+    index: number;
+    pausedLines: number[];
+    setPausedLines: React.Dispatch<React.SetStateAction<number[]>>;
   }
   
 
@@ -58,7 +67,7 @@ const programmingLanguages = [
   "Laravel", "Express", "GraphQL", "MongoDB", "PostgreSQL"
 ];
 
-const GlassCard = ({ src, title, description, iconBg = "bg-purple-500/20", delay = 0 }) => {
+const GlassCard = ({ src, title, description, iconBg = "bg-purple-500/20", delay = 0 }: GlassCardProps) => {
   const { theme } = useTheme();
   
   return (
@@ -86,7 +95,7 @@ const GlassCard = ({ src, title, description, iconBg = "bg-purple-500/20", delay
   );
 };
 
-const MarqueeLine = ({ direction = "left", speed = 50, index, pausedLines, setPausedLines }) => {
+const MarqueeLine = ({ direction = "left", speed = 50, index, pausedLines, setPausedLines } : MarqueeLineProps) => {
   const controls = useAnimation();
   const [isHovered, setIsHovered] = useState(false);
   const { theme } = useTheme();
@@ -148,7 +157,7 @@ const MarqueeLine = ({ direction = "left", speed = 50, index, pausedLines, setPa
 };
 
 const InteractiveMarquee = () => {
-  const [pausedLines, setPausedLines] = useState([]);
+  const [pausedLines, setPausedLines] =  useState<number[]>([]);
   const { theme } = useTheme();
 
   return (
@@ -160,7 +169,7 @@ const InteractiveMarquee = () => {
           speed={60} 
           index={0} 
           pausedLines={pausedLines} 
-          setPausedLines={setPausedLines} 
+          setPausedLines={setPausedLines}
         />
       </div>
       <div className="relative">

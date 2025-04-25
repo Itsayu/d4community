@@ -12,6 +12,16 @@ import { FounderType } from "@/types/founder";
 import { useTheme } from "next-themes";
 import aboutHeroImg from '@/public/images/abouthero.png';
 
+interface GlassCardProps {
+    title: string;
+    description?: string;
+    delay?: number;
+    value: number;
+    index?: number;
+    key?: number; 
+  }
+    
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -26,7 +36,7 @@ const staggerContainer = {
 };
 
 // Glass Card Component for Pillars
-const GlassCard = ({ title, description, delay = 0 }) => {
+const GlassCard = ({ title, description, delay = 0 }: GlassCardProps) => {
   const { theme } = useTheme();
   
   return (
@@ -57,23 +67,23 @@ const GlassCard = ({ title, description, delay = 0 }) => {
 };
 
 // Counter Component
-const CounterCard = ({ title, value, index }) => {
+const CounterCard = ({ title, value, index }: GlassCardProps) => {
   const { theme } = useTheme();
   const [count, setCount] = useState(0);
   const counterRef = useRef(null);
   
   useEffect(() => {
-    let intervalId;
+    let intervalId: number | null = null;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
           let current = 0;
-          intervalId = setInterval(() => {
+          intervalId = window.setInterval(() => {
             current += 1;
             if (current <= value) {
               setCount(current);
-            } else {
-              clearInterval(intervalId);
+            } else if (intervalId) { 
+                clearInterval(intervalId);
             }
           }, 60);
         }
@@ -95,7 +105,7 @@ const CounterCard = ({ title, value, index }) => {
     <motion.div 
       ref={counterRef}
       variants={fadeInUp}
-      transition={{ delay: index * 0.15 }}
+      transition={{ delay: (index ?? 0) * 0.15 }}
       className="text-center"
     >
       <h3 className="text-gray-400 text-lg md:text-xl mb-2">{title}</h3>
@@ -186,6 +196,8 @@ function AboutHeroSection() {
               title={props.title} 
               description={props.description}
               delay={k} 
+              value={0}
+              index={0}
             />
           ))}
         </div>
@@ -266,7 +278,7 @@ function ReachSection() {
               key={i}
               title={prop.title}
               value={prop.reach}
-              index={i}
+              index={i} 
             />
           ))}
         </motion.div>

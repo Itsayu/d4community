@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Background from "@/app/components/Background";
@@ -9,16 +9,24 @@ import HeroSection from "@/app/components/HeroSection";
 import { Heading, BigHeading } from "@/app/components/Headings";
 import { useTheme } from "next-themes";
 import teamImg from "@/app/assets/images/teamHeroImg.png";
-import { TeamType } from "@/types/team";
 import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-    type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import CoreTeamCard from "@/app/components/CoreTeamCard";
+
+interface TeamMember {
+  name: string;
+  bio: string;
+  designation: string;
+  image: string;
+  link: string;
+  theme?: 'light' | 'dark';
+}
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -34,7 +42,7 @@ const staggerContainer = {
 };
 
 export default function TeamPage() {
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -129,8 +137,8 @@ function FounderSection() {
                     <Image
                       src={founder.image}
                       alt={founder.name}
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      style={{ objectFit: 'cover' }}
                       className="object-center"
                     />
                   </div>
@@ -181,12 +189,12 @@ function FounderSection() {
 
 function CoreTeamSection() {
   const { theme } = useTheme();
-  const [selectedTeamMember, setSelectedTeamMember] = useState(null);
+  const [selectedTeamMember, setSelectedTeamMember] = useState<TeamMember | null>(null);
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [autoScroll, setAutoScroll] = useState(true);
 
-  const coreTeam = [
+  const coreTeam: TeamMember[] = [
     {
       name: "Ayush Anshu",
       bio: "Friendly neighbourhood web developer",
@@ -242,20 +250,19 @@ function CoreTeamSection() {
   useEffect(() => {
     if (!autoScroll || !api) return;
 
-    const interval = setInterval(() => {
-      if (api) {
-        if (api.selectedScrollSnap() === coreTeam.length - 1) {
-          api.scrollTo(0);
-        } else {
-          api.next();
-        }
+    const scrollNext = () => {
+      if (api.canScrollNext()) {
+        api.scrollNext();
+      } else {
+        api.scrollTo(0);
       }
-    }, 2000);
+    };
 
+    const interval = setInterval(scrollNext, 2000);
     return () => clearInterval(interval);
-  }, [api, autoScroll, coreTeam.length]);
+  }, [api, autoScroll]);
 
-  const openPopUp = (member) => {
+  const openPopUp = (member: TeamMember) => {
     setAutoScroll(false);
     setSelectedTeamMember(member);
   };
@@ -293,7 +300,7 @@ function CoreTeamSection() {
                 designation={member.designation}
                 image={member.image}
                 link={member.link}
-                theme={theme}
+                // theme={theme === 'dark' ? 'dark' : 'light'}
               />
             </motion.div>
           ))}
@@ -323,7 +330,7 @@ function CoreTeamSection() {
                       designation={member.designation}
                       image={member.image}
                       link={member.link}
-                      theme={theme}
+                    //   theme={theme === 'dark' ? 'dark' : 'light'}
                     />
                   </div>
                 </CarouselItem>
@@ -364,8 +371,8 @@ function CoreTeamSection() {
                 <Image
                   src={selectedTeamMember.image}
                   alt={selectedTeamMember.name}
-                  layout="fill"
-                  objectFit="cover"
+                  fill
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
 
@@ -464,8 +471,8 @@ function PartnerSection() {
               <Image
                 src={partner.logo}
                 alt={partner.name}
-                layout="fill"
-                objectFit="contain"
+                fill
+                style={{ objectFit: 'contain' }}
               />
             </div>
           </motion.div>
